@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="js/mui.min.js"></script>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="css/header.css" />
+		<link rel="stylesheet" type="text/css" href="fontico/iconfont.css" />
+		<script type="text/javascript" charset="utf-8">
+			mui.init();
+			mui.plusReady(() => {
+				plus.navigator.setStatusBarStyle("light")
+				plus.navigator.setStatusBarBackground("#C9394A");
+			});
+		</script>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav title">
+			<h1 class="mui-title title-color"><b>Chat</b></h1>
+		</header>
+		<nav class="mui-bar mui-bar-tab">
+			<a class="mui-tab-item mui-active" tabindex="0">
+				<span class="mui-icon iconfont icon-fire"></span>
+				<span class="mui-tab-label">会话</span>
+			</a>
+			<a class="mui-tab-item" tabindex="1">
+				<span class="mui-icon iconfont icon-tongxunlu"></span>
+				<span class="mui-tab-label">联系人</span>
+			</a>
+			<a class="mui-tab-item" tabindex="2">
+				<span class="mui-icon iconfont icon-zhinanzhen"></span>
+				<span class="mui-tab-label">动态</span>
+			</a>
+			<a class="mui-tab-item" tabindex="3">
+				<span class="mui-icon iconfont icon-wode-active"></span>
+				<span class="mui-tab-label">我</span>
+			</a>
+		</nav>
+		<script type="text/javascript">
+			var routerArr = [{
+				pageId: "chatlist.html",
+				pageUrl: "chatlist.html"
+			}, {
+				pageId: "contact.html",
+				pageUrl: "contact.html"
+			}, {
+				pageId: "discover.html",
+				pageUrl: "discover.html"
+			}, {
+				pageId: "me.html",
+				pageUrl: "me.html"
+			}];
+			var segmentStyle = {
+				top: "44px",
+				bottom: "50px"
+			}
+			mui.plusReady(() => {
+				// 获取当前webview对象
+				var indexWebview = plus.webview.currentWebview();
+
+				// 像当前的主页webview追加子页的4张webview对象
+				routerArr.forEach(router => {
+					console.log(JSON.stringify(router))
+					var page = plus.webview.create(
+						router.pageUrl,
+						router.pageId,
+						segmentStyle
+					);
+					// 隐藏webview窗口
+					page.hide();
+					// 追加每一个字也到当前主页面
+					indexWebview.append(page);
+				});
+				plus.webview.show(routerArr[0].pageUrl);
+				// 批量绑定tap事件, 展示不同页面
+				mui(".mui-bar-tab").on("tap", "a", function() {
+					var tabindex = this.getAttribute("tabindex");
+					// 显示点击的tab选项所对应的页面
+					plus.webview.show(routerArr[tabindex].pageId, "fade-in");
+					routerArr.forEach((router, index) => {
+						if (tabindex != index) {
+							plus.webview.hide(router.pageId, "fade-out");
+						}
+					})
+				});
+			});
+		</script>
+	</body>
+</html>
