@@ -108,12 +108,14 @@
 						password: txt_password.value,
 						cid	
 					};
-					console.log(JSON.stringify(data));
-					mui.ajax(app.serverUrl + '/u/registOrLogin',{
+					const url = app.serverUrl + '/u/registOrLogin';
+						console.log(url);
+					mui.ajax(url, {
 						data,
 						dataType:'json',//服务器返回json格式数据
 						type:'post',//HTTP请求类型
 						timeout:10000,//超时时间设置为10秒；
+						headers:{'Content-Type':'application/json'},
 						success:function(data){
 							console.log(JSON.stringify(data));
 						},

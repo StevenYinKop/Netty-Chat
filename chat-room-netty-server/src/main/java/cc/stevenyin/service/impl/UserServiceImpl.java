@@ -1,7 +1,11 @@
 package cc.stevenyin.service.impl;
 
 
+import java.security.NoSuchAlgorithmException;
+
 import org.n3r.idworker.Sid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -14,6 +18,8 @@ import cc.stevenyin.utils.MD5Utils;
 
 @Service
 public class UserServiceImpl implements UserService{
+	
+	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -30,24 +36,21 @@ public class UserServiceImpl implements UserService{
 	@Override
 	@Transactional(propagation = Propagation.SUPPORTS)
 	public Users login(Users user) {
-		Users result = userRepository.findByUsernameAndPassword(user.getUsername(), user.getPassword());
-		return result;
+		return userRepository.findByUsernameAndPassword(user.getUsername(), MD5Utils.getMD5Str(user.getPassword()));
 	}
 
 	@Override
 	public Users regist(Users user) {
 		Users result = new Users();
-		try {
-			result.setNickname(user.getUsername());
-			result.setFaceImage("");
-			result.setFaceImageBig("");
-			result.setQrcode(""); // TODO
-			result.setPassword(MD5Utils.getMD5Str(user.getPassword()));
-			result.setId(sid.nextShort());
-			userRepository.save(result);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		result.setUsername(user.getUsername());
+		result.setNickname(user.getUsername());
+		result.setFaceImage("");
+		result.setFaceImageBig("");
+		result.setQrcode(""); // TODO
+		result.setPassword(MD5Utils.getMD5Str(user.getPassword()));
+		result.setId(sid.nextShort());
+		result.setCid(user.getCid());
+		userRepository.save(result);
 		return result;
 	}
 
