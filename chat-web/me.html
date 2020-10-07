@@ -9,10 +9,102 @@
 	</head>
 
 	<body>
-		<h1>我的</h1>
+		<ul class="mui-table-view">
+			<li id="link_myface" class="mui-table-view-cell mui-media">
+				<a href="javascript:;">
+					<span class="mui-icon mui-pull-right mui-icon-arrowright"
+						style="line-height: 42px;color: lightgray; margin-left: 3px;"
+					></span>
+					<img id="my_face_image" class="mui-media-object mui-pull-right" src="css/registLogin/arrow.jpg">
+					<div class="mui-media-body"
+						style="line-height: 42px;font-size: 16px;"
+					>
+						头像
+					</div>
+				</a>
+			</li>
+			<li class="mui-table-view-cell mui-media">
+				<a href="javascript:;">
+					<span class="mui-icon mui-pull-right mui-icon-arrowright"
+						style="color: lightgray; margin-left: 3px;"
+					></span>
+					<span id="span_nickname" class="mui-pull-right"
+						style="font-size: 14px;color: lightgray;"
+					>
+					</span>
+					<div class="mui-media-body"
+						style="font-size: 16px;">
+						昵称
+					</div>
+				</a>
+			</li>
+			<li class="mui-table-view-cell mui-media">
+				<a href="javascript:;">
+					<span id="span_username" class="mui-pull-right"
+						style="font-size: 14px;color: lightgray;"
+					>
+						Steven
+					</span>
+					<div class="mui-media-body">
+					    账号
+					</div>
+				</a>
+			</li>
+			<li class="mui-table-view-cell mui-media">
+				<a href="javascript:;">
+					<img class="mui-media-object mui-pull-right" src="image/qrcode.png">
+					<div class="mui-media-body"
+						style="line-height: 42px;font-size: 16px;">
+					    二维码
+					</div>
+				</a>
+			</li>
+		</ul>
+		<br />
+		<ul class="mui-table-view">
+			<li class="mui-table-view-cell mui-media"
+				style="text-align: center;"
+			>
+				<a href="javascript:;">
+					<div class="mui-media-body">
+					    退出登录
+					</div>
+				</a>
+			</li>
+		</ul>
 		<script src="js/mui.js"></script>
+		<script src="js/app.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
 			mui.init()
+			mui.plusReady(function () {
+				// 获得当前webview, 刷新当前用户信息
+				var meWebview = plus.webview.currentWebview();
+				meWebview.addEventListener('show', function() {
+					refreshUserInfo();
+				});
+				var link_myface = document.getElementById("link_myface");
+				link_myface.addEventListener("tap", function() {
+					mui.openWindow("myface.html", "myface.html");
+				});
+			});
+			
+			function refreshUserInfo() {
+				var userInfo = app.getUserGlobalInfo();
+				console.log(JSON.stringify(userInfo))
+				if (userInfo !== null) {					
+					var faceImage = userInfo.faceImage;
+					var nickname = userInfo.nickname;
+					var username = userInfo.username;
+					var span_nickname = document.getElementById('span_nickname');
+					var span_username = document.getElementById('span_username');
+					span_nickname.innerHTML = nickname;
+					span_username.innerHTML = username;
+				}
+				if (app.isNotNull(faceImage)) {
+					var my_face_image = document.getElementById('my_face_image');
+					my_face_image.src = app.imgServerUrl + faceImage;
+				}
+			}
 		</script>
 	</body>
 

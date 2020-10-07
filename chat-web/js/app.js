@@ -351,6 +351,5 @@ window.app = {
 		this.friendId = friendId;
 		this.msg = msg;
 		this.isRead = isRead;
-	}
-	
+	},	
 }
