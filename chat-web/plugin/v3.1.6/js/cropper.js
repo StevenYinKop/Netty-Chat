@@ -96,7 +96,7 @@ var DEFAULTS = {
   restore: true,
 
   // Check if the current image is a cross-origin image
-  checkCrossOrigin: true,
+  checkCrossOrigin: false,
 
   // Check the current image's Exif Orientation information
   checkOrientation: true,
@@ -2641,13 +2641,13 @@ var methods = {
    */
   getCroppedCanvas: function getCroppedCanvas() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
+	debugger;
     if (!this.ready || !window.HTMLCanvasElement) {
       return null;
     }
 
     var canvasData = this.canvas;
-
+	this.image.crossOrigin = 'Anonymous';
     var source = getSourceCanvas(this.$clone[0], this.image, canvasData, options);
 
     // Returns the source canvas if it is not cropped.
@@ -2774,6 +2774,7 @@ var methods = {
     context.drawImage.apply(context, [source].concat(toConsumableArray($.map(params, function (param) {
       return Math.floor(normalizeDecimalNumber(param));
     }))));
+	canvas.crossOrigin = 'Anonymous';
     return canvas;
   },
 

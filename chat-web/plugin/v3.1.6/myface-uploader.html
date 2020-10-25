@@ -66,9 +66,8 @@
 					// 从相册中选择图片
 					console.log("从相册中选择图片:");
 				    plus.gallery.pick( function(path){
-				    	console.log(path);
 				    	$image.attr('src', path);
-				    	
+				    	$image.attr('crossorigin', 'anonymous');
 				    	faceCutter();
 				    }, function ( e ) {
 				    	mui.openWindow("index.html", "index.html");
@@ -79,10 +78,11 @@
 				$("#cutter").on('tap', function() {
 					
 					plus.nativeUI.showWaiting( "上传中..." );
-					
 					var cropper = $image.data('cropper');
 					var result = $image.cropper("getCroppedCanvas");
+					debugger;
 					if(result) {
+						console.log(result);
 						var base64Url = result.toDataURL();
 						
 						// 上传头像
@@ -129,10 +129,12 @@
 				
 				plus.nativeUI.showWaiting( "请稍等..." );
 				
-//				var $image = $('#image');
 				var options = {
 					aspectRatio: 1 / 1,
-					crop: function(e) {}
+					crop: function(e) {
+						console.log(e);
+					},
+					checkCrossOrigin:false,
 				};
 			
 				// Cropper
